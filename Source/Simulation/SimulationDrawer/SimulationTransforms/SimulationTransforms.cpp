@@ -12,6 +12,7 @@ SimulationTransforms::SimulationTransforms(double* quadVertices, size_t quadVert
 	quadVertices(quadVertices),	quadVertexCount(quadVertexCount)
 {
 	lastZoom = TransformSettings::Zoom;
+	TransformSettings::ViewportSizeChanged = true;
 
 	auto initialQuadVertices = std::make_unique_for_overwrite<double[]>(quadVertexCount);
 	std::copy(quadVertices, quadVertices + quadVertexCount, initialQuadVertices.get());
