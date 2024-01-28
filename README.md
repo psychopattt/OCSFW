@@ -28,7 +28,8 @@ OCSFW (OpenGL Compute Shader Framework) is an open source, multi-platform librar
 2. Create a child class of Simulation.h
 3. Call OSCFW's constructor with your simulation and a title
 
-An example of a fully working project is available [here](https://github.com/psychopattt/Game-of-Life-OpenGL)
+A template for a basic project is available [here](https://github.com/psychopattt/OCSFW-Galaxy)<br>
+An example of a larger project is available [here](https://github.com/psychopattt/Game-of-Life-OpenGL)
 
 ## Credits
 - [GLFW](https://www.glfw.org)
