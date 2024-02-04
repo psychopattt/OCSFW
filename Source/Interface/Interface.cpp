@@ -85,9 +85,9 @@ void Interface::InitializeGlad()
 
 void Interface::CreateFpsHandlers()
 {
-	MainSettings::TargetFps = static_cast<float>(
+	MainSettings::TargetFps = fmaxf(100.0f, static_cast<float>(
 		glfwGetVideoMode(glfwGetPrimaryMonitor())->refreshRate
-	);
+	));
 
 	simFpsLimiter = make_unique<FpsLimiter>(MainSettings::TargetFps);
 	uiFpsLimiter = make_unique<FpsLimiter>(MainSettings::TargetFps);
