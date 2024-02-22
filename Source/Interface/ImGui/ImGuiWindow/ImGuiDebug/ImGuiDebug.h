@@ -5,7 +5,7 @@
 class ImGuiDebug : public ImGuiWindow
 {
 	public:
-		void Render();
+		void Render() override;
 
 #if DEBUG
 

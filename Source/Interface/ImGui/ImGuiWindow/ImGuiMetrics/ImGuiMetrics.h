@@ -10,7 +10,7 @@ class ImGuiMetrics : public ImGuiWindow
 {
 	public:
 		ImGuiMetrics();
-		void Render();
+		void Render() override;
 
 	private:
 		int windowFlags;

@@ -5,7 +5,7 @@
 class ImGuiLog : public ImGuiWindow
 {
 	public:
-		void Render();
+		void Render() override;
 
 	private:
 		int windowFlags = 0;

@@ -5,8 +5,8 @@
 class ImGuiMain : public ImGuiWindow
 {
 	public:
-		void Initialize();
-		void Render();
+		void Initialize() override;
+		void Render() override;
 
 	private:
 		int newSimSize[2] = { };
