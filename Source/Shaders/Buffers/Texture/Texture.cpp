@@ -38,10 +38,56 @@ unsigned int Texture::GetId() const
 	return id;
 }
 
+unsigned int Texture::GetWidth() const
+{
+	return width;
+}
+
+unsigned int Texture::GetHeight() const
+{
+	return height;
+}
+
 void Texture::Activate() const
 {
 	glActiveTexture(GL_TEXTURE0 + id);
 	glBindTexture(GL_TEXTURE_2D, id);
+}
+
+void Texture::SetWrapX(int wrapX) const
+{
+	glTextureParameteri(id, GL_TEXTURE_WRAP_S, wrapX);
+	LogParameterFailure("wrap X", wrapX);
+}
+
+void Texture::SetWrapY(int wrapY) const
+{
+	glTextureParameteri(id, GL_TEXTURE_WRAP_T, wrapY);
+	LogParameterFailure("wrap Y", wrapY);
+}
+
+void Texture::SetWrap(int wrap) const
+{
+	SetWrapX(wrap);
+	SetWrapY(wrap);
+}
+
+void Texture::SetFilter(int filter) const
+{
+	glTextureParameteri(id, GL_TEXTURE_MIN_FILTER, filter);
+	LogParameterFailure("filter min", filter);
+	glTextureParameteri(id, GL_TEXTURE_MAG_FILTER, filter);
+	LogParameterFailure("filter mag", filter);
+}
+
+void Texture::LogParameterFailure(const char* label, int value) const
+{
+	if (int errorCode = glGetError())
+	{
+		MainSettings::Log << "Texture Error - Failed to set " << label <<
+			"\nId: " << id << ", value: " << value << ", error code: " <<
+			errorCode << "\n\n";
+	}
 }
 
 void Texture::LogGenerationFailure(int width, int height, int format,
