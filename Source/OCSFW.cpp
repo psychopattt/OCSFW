@@ -17,6 +17,10 @@ OCSFW::OCSFW(Simulation* simulation, const char* title, MouseHandler* mouseHandl
 	KeyboardHandler* keyboardHandler) : OCSFW(simulation, title, mouseHandler,
 	keyboardHandler, nullptr, 0) { }
 
+OCSFW::OCSFW(Simulation* simulation, const char* title, ImGuiWindow* menus[],
+	size_t menuCount) : OCSFW(simulation, title, nullptr, nullptr, menus,
+	menuCount) { }
+
 OCSFW::OCSFW(Simulation* simulation, const char* title, MouseHandler* mouseHandler,
 	KeyboardHandler* keyboardHandler, ImGuiWindow* menus[], size_t menuCount)
 {
