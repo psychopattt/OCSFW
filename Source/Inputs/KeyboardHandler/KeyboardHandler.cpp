@@ -13,6 +13,7 @@
 void KeyboardHandler::HandleKeyboard(GLFWwindow* window,
 	int key, int scanCode, int action, int mods)
 {
+	ApplyHideGui(key, action);
 	ApplyRestart(key, action);
 	ApplyFullscreen(key, action);
 
@@ -20,6 +21,12 @@ void KeyboardHandler::HandleKeyboard(GLFWwindow* window,
 	{
 		ApplyFrameStep(key, action);
 	}
+}
+
+void KeyboardHandler::ApplyHideGui(int key, int action)
+{
+	if (key == GLFW_KEY_F1 && action == GLFW_PRESS)
+		MainSettings::HideGui = !MainSettings::HideGui;
 }
 
 void KeyboardHandler::ApplyRestart(int key, int action)

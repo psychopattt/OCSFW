@@ -8,6 +8,7 @@ class KeyboardHandler
 		virtual void Update(double deltaTime);
 
 	protected:
+		virtual void ApplyHideGui(int key, int action);
 		virtual void ApplyRestart(int key, int action);
 		virtual void ApplyFullscreen(int key, int action);
 		virtual void ApplyFrameStep(int key, int action);

@@ -104,6 +104,9 @@ void ImGuiHandler::BeginRender()
 
 void ImGuiHandler::Render()
 {
+	if (MainSettings::HideGui)
+		return;
+
 	BeginRender();
 
 	for (int i = 0; i < ImGuiMenus::MenuCount; i++)
