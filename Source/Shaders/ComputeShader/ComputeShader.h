@@ -5,8 +5,8 @@
 class ComputeShader : public Shader
 {
 	public:
-		ComputeShader(const char* shaderName, unsigned int width,
-			unsigned int height, unsigned int depth = 1);
+		ComputeShader(const char* shaderName, unsigned int width = 1,
+			unsigned int height = 1, unsigned int depth = 1);
 		void Execute() const;
 
 	private:
