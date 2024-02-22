@@ -29,6 +29,7 @@ Texture::Texture(unsigned int width, unsigned int height, int format, int wrapX,
 
 	glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, GL_RGBA, GL_FLOAT, NULL);
 	glBindImageTexture(id, id, 0, GL_FALSE, 0, GL_READ_WRITE, format);
+	Clear();
 
 	LogGenerationFailure(width, height, format, wrapX, wrapY, filtering);
 }
@@ -78,6 +79,11 @@ void Texture::SetFilter(int filter) const
 	LogParameterFailure("filter min", filter);
 	glTextureParameteri(id, GL_TEXTURE_MAG_FILTER, filter);
 	LogParameterFailure("filter mag", filter);
+}
+
+void Texture::Clear() const
+{
+	glClearTexImage(id, 0, GL_RGBA, GL_FLOAT, NULL);
 }
 
 void Texture::LogParameterFailure(const char* label, int value) const

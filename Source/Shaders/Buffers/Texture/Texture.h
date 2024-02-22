@@ -15,6 +15,7 @@ class Texture
 		void SetWrapY(int wrapY) const;
 		void SetWrap(int wrap) const;
 		void SetFilter(int filter) const;
+		void Clear() const;
 		~Texture();
 
 	private:
