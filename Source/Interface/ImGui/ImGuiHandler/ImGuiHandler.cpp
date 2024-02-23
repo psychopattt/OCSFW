@@ -104,16 +104,16 @@ void ImGuiHandler::BeginRender()
 
 void ImGuiHandler::Render()
 {
-	if (MainSettings::HideGui)
-		return;
-
 	BeginRender();
 
-	for (int i = 0; i < ImGuiMenus::MenuCount; i++)
-		ImGuiMenus::Menus[i]->Render();
+	if (!MainSettings::HideGui)
+	{
+		for (int i = 0; i < ImGuiMenus::MenuCount; i++)
+			ImGuiMenus::Menus[i]->Render();
 
-	for (const unique_ptr<ImGuiWindow>& menu : defaultMenus)
-		menu->Render();
+		for (const unique_ptr<ImGuiWindow>& menu : defaultMenus)
+			menu->Render();
+	}
 
 	EndRender();
 }
