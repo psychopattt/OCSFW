@@ -84,9 +84,7 @@ void ImGuiLog::RenderOptionsPopup(const char* popupId)
 
 		if (Button("Copy", ImVec2(buttonWidth, 0)))
 		{
-			LogToClipboard();
-			LogText(Log);
-			LogFinish();
+			SetClipboardText(Log);
 			CloseCurrentPopup();
 			EndPopup();
 			return;
