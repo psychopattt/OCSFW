@@ -15,9 +15,9 @@ static const char* fontSizes[] = {
 
 void ImGuiMain::Initialize()
 {
-	newSimSeed = MainSettings::Sim->GetSeed();
-	newSimSize[0] = MainSettings::Sim->GetWidth();
-	newSimSize[1] = MainSettings::Sim->GetHeight();
+	MainSettings::PendingSimSeed = MainSettings::Sim->GetSeed();
+	MainSettings::PendingSimSize[0] = MainSettings::Sim->GetWidth();
+	MainSettings::PendingSimSize[1] = MainSettings::Sim->GetHeight();
 }
 
 void ImGuiMain::Render()
@@ -49,17 +49,19 @@ void ImGuiMain::RenderSimulationSection()
 
 void ImGuiMain::RenderSimulationSettingsSection()
 {
+	using MainSettings::PendingSimSize, MainSettings::PendingSimSeed;
+
 	if (Button("Restart", ImVec2(-1, 0)))
 	{
-		MainSettings::Sim->Restart(newSimSize[0], newSimSize[1], newSimSeed);
+		MainSettings::Sim->Restart(PendingSimSize[0], PendingSimSize[1], PendingSimSeed);
 		MainSettings::Gui->TriggerResize();
 	}
 
 	SeparatorText("Size");
-	DragInt2("##dragSize", newSimSize, 1.0f, 0, INT32_MAX, "%d", ImGuiSliderFlags_AlwaysClamp);
+	DragInt2("##dragSize", PendingSimSize, 1.0f, 0, INT32_MAX, "%d", ImGuiSliderFlags_AlwaysClamp);
 
 	SeparatorText("Seed");
-	InputScalar("##textSeed", ImGuiDataType_U32, &newSimSeed, &seedStepSpeed);
+	InputScalar("##textSeed", ImGuiDataType_U32, &PendingSimSeed, &seedStepSpeed);
 }
 
 void ImGuiMain::RenderSimulationPositionSection()

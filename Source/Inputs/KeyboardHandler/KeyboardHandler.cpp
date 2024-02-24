@@ -32,7 +32,15 @@ void KeyboardHandler::ApplyHideGui(int key, int action)
 void KeyboardHandler::ApplyRestart(int key, int action)
 {
 	if (key == GLFW_KEY_F5 && action == GLFW_PRESS)
-		MainSettings::Sim->Restart();
+	{
+		MainSettings::Sim->Restart(
+			MainSettings::PendingSimSize[0],
+			MainSettings::PendingSimSize[1],
+			MainSettings::PendingSimSeed
+		);
+
+		MainSettings::Gui->TriggerResize();
+	}
 }
 
 void KeyboardHandler::ApplyFullscreen(int key, int action)
