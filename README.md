@@ -14,6 +14,7 @@ OCSFW (OpenGL Compute Shader Framework) is an open source, multi-platform librar
   - Metrics window
     - Control position and displayed info
   - Log window
+  - Toggle interface (F1)
   - Toggle fullscreen (F11)
   - Font resize
 - Debug
