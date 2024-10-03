@@ -53,7 +53,10 @@ void Interface::SetOpenGlVersion(int major, int minor)
 
 void Interface::CreateWindow()
 {
-	// Create the GLFW window
+	// Create a centered GLFW window
+	const GLFWvidmode* videoMode = glfwGetVideoMode(glfwGetPrimaryMonitor());
+	glfwWindowHint(GLFW_POSITION_X, (videoMode->width / 2) - (width / 2));
+	glfwWindowHint(GLFW_POSITION_Y, (videoMode->height / 2) - (height / 2));
 	window = glfwCreateWindow(width, height, title->ToString().c_str(), NULL, NULL);
 
 	if (window == NULL)
@@ -65,13 +68,6 @@ void Interface::CreateWindow()
 
 	glfwMakeContextCurrent(window);
 	glfwSwapInterval(0); // Disable V-Sync
-
-	// Move window to center
-	const GLFWvidmode* videoMode = glfwGetVideoMode(glfwGetPrimaryMonitor());
-	glfwSetWindowPos(
-		window, (videoMode->width / 2) - (width / 2),
-		(videoMode->height / 2) - (height / 2)
-	);
 }
 
 void Interface::InitializeGlad()
