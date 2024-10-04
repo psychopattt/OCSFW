@@ -178,7 +178,7 @@ void ImGuiMetrics::RenderDisplayMenu()
 
 void ImGuiMetrics::RenderDisplaySelectable(const char* label, DisplayFlags value)
 {
-	if (Selectable(label, displayFlags & value, ImGuiSelectableFlags_DontClosePopups))
+	if (Selectable(label, displayFlags & value, ImGuiSelectableFlags_NoAutoClosePopups))
 		displayFlags = static_cast<DisplayFlags>(displayFlags ^ value);
 }
 

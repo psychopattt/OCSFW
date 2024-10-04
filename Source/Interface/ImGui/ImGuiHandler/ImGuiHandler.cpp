@@ -71,8 +71,8 @@ void ImGuiHandler::ApplyStyle()
 	colors[ImGuiCol_FrameBgActive] = ImVec4(0.40f, 0.40f, 0.40f, 0.80f);
 	colors[ImGuiCol_TitleBgActive] = ImVec4(0.16f, 0.16f, 0.16f, 1.00f);
 	colors[ImGuiCol_TitleBgCollapsed] = ImVec4(0.00f, 0.00f, 0.00f, 0.75f);
-	colors[ImGuiCol_TabUnfocused] = ImVec4(0.18f, 0.18f, 0.18f, 1.00f);
-	colors[ImGuiCol_TabUnfocusedActive] = ImVec4(0.36f, 0.36f, 0.36f, 0.54f);
+	colors[ImGuiCol_TabDimmed] = ImVec4(0.18f, 0.18f, 0.18f, 1.00f);
+	colors[ImGuiCol_TabDimmedSelected] = ImVec4(0.36f, 0.36f, 0.36f, 0.54f);
 	colors[ImGuiCol_ModalWindowDimBg] = ImVec4(0.00f, 0.00f, 0.00f, 0.50f);
 	colors[ImGuiCol_NavHighlight] = ImVec4(0.00f, 1.00f, 0.00f, 0.50f);
 	colors[ImGuiCol_CheckMark] = backgroundGreen;
@@ -92,7 +92,7 @@ void ImGuiHandler::ApplyStyle()
 	colors[ImGuiCol_ResizeGripActive] = activeGreen;
 	colors[ImGuiCol_Tab] = backgroundGreen;
 	colors[ImGuiCol_TabHovered] = hoveredGreen;
-	colors[ImGuiCol_TabActive] = activeGreen;
+	colors[ImGuiCol_TabSelected] = activeGreen;
 }
 
 void ImGuiHandler::BeginRender()
