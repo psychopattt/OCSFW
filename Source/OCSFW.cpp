@@ -10,37 +10,56 @@
 #include "Settings/MainSettings.h"
 #include "Settings/ImGuiMenus.h"
 
-OCSFW::OCSFW(Simulation* simulation, const char* title) :
-	OCSFW(simulation, title, nullptr, nullptr, nullptr, 0) { }
-
-OCSFW::OCSFW(Simulation* simulation, const char* title, MouseHandler* mouseHandler,
-	KeyboardHandler* keyboardHandler) : OCSFW(simulation, title, mouseHandler,
-	keyboardHandler, nullptr, 0) { }
-
-OCSFW::OCSFW(Simulation* simulation, const char* title, ImGuiWindow* menus[],
-	size_t menuCount) : OCSFW(simulation, title, nullptr, nullptr, menus,
-	menuCount) { }
-
-OCSFW::OCSFW(Simulation* simulation, const char* title, MouseHandler* mouseHandler,
-	KeyboardHandler* keyboardHandler, ImGuiWindow* menus[], size_t menuCount)
+OCSFW::OCSFW(Simulation* simulation)
 {
 	MainSettings::Sim = simulation;
+}
+
+OCSFW& OCSFW::WithTitle(const char* title)
+{
+	this->title = title;
+	return *this;
+}
+
+OCSFW& OCSFW::WithSize(int width, int height)
+{
+	this->height = height;
+	this->width = width;
+	return *this;
+}
+
+OCSFW& OCSFW::WithMouseHandler(MouseHandler* mouseHandler)
+{
 	InputHandlers::MouseHandler = mouseHandler;
+	return *this;
+}
+
+OCSFW& OCSFW::WithKeyboardHandler(KeyboardHandler* keyboardHandler)
+{
 	InputHandlers::KeyboardHandler = keyboardHandler;
+	return *this;
+}
+
+OCSFW& OCSFW::WithMenus(ImGuiWindow* menus[], size_t menuCount)
+{
 	ImGuiMenus::MenuCount = menuCount;
 	ImGuiMenus::Menus = menus;
+	return *this;
+}
 
-	Interface gui(1280, 720, title);
-	simulation->Initialize();
+void OCSFW::Run()
+{
+	Interface gui(width, height, title);
+	MainSettings::Sim->Initialize();
 
 	while (!gui.ShouldExit())
 	{
 		UpdateType updateType = gui.Update();
 
 		if (updateType & SimulationUpdate)
-			simulation->Execute();
+			MainSettings::Sim->Execute();
 
 		if (updateType & DisplayUpdate)
-			simulation->Draw();
+			MainSettings::Sim->Draw();
 	}
 }

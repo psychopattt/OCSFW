@@ -8,11 +8,16 @@ class KeyboardHandler;
 class OCSFW
 {
 	public:
-		OCSFW(Simulation* simulation, const char* title);
-		OCSFW(Simulation* simulation, const char* title, MouseHandler* mouseHandler,
-			KeyboardHandler* keyboardHandler);
-		OCSFW(Simulation* simulation, const char* title, ImGuiWindow* menus[],
-			size_t menuCount);
-		OCSFW(Simulation* simulation, const char* title, MouseHandler* mouseHandler,
-			KeyboardHandler* keyboardHandler, ImGuiWindow* menus[], size_t menuCount);
+		OCSFW(Simulation* simulation);
+		OCSFW& WithTitle(const char* title);
+		OCSFW& WithSize(int width, int height);
+		OCSFW& WithMouseHandler(MouseHandler* mouseHandler);
+		OCSFW& WithKeyboardHandler(KeyboardHandler* keyboardHandler);
+		OCSFW& WithMenus(ImGuiWindow* menus[], size_t menuCount);
+		void Run();
+
+	private:
+		int width = 1280;
+		int height = 720;
+		const char* title = "OCSFW";
 };
