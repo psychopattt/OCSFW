@@ -52,7 +52,7 @@ void Shader::Link(unsigned int* shaderIds, size_t shaderCount)
 
 	for (int i = 0 ; i < shaderCount; i++)
 		glAttachShader(id, shaderIds[i]);
-	
+
 	glLinkProgram(id);
 
 	int success;
@@ -102,6 +102,13 @@ void Shader::SetFloat(const char* name, float value) const
 {
 	unsigned int location = glGetUniformLocation(id, name);
 	glProgramUniform1f(id, location, value);
+	LogParameterFailure(name, location);
+}
+
+void Shader::SetDouble(const char* name, double value) const
+{
+	unsigned int location = glGetUniformLocation(id, name);
+	glProgramUniform1d(id, location, value);
 	LogParameterFailure(name, location);
 }
 

@@ -10,6 +10,7 @@ class Shader
 		void SetInt(const char* name, unsigned int value) const;
 		void SetBool(const char* name, bool value) const;
 		void SetFloat(const char* name, float value) const;
+		void SetDouble(const char* name, double value) const;
 		void SetBufferBinding(const char* name, unsigned int binding) const;
 		void SetTextureBinding(const char* name, unsigned int binding) const;
 		~Shader();
