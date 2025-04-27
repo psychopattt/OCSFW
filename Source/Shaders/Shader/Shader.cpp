@@ -79,39 +79,6 @@ void Shader::Activate() const
 	glUseProgram(id);
 }
 
-void Shader::SetInt(const char* name, int value) const
-{
-	unsigned int location = glGetUniformLocation(id, name);
-	glProgramUniform1i(id, location, value);
-	LogParameterFailure(name, location);
-}
-
-void Shader::SetInt(const char* name, unsigned int value) const
-{
-	unsigned int location = glGetUniformLocation(id, name);
-	glProgramUniform1ui(id, location, value);
-	LogParameterFailure(name, location);
-}
-
-void Shader::SetBool(const char* name, bool value) const
-{
-	SetInt(name, static_cast<int>(value));
-}
-
-void Shader::SetFloat(const char* name, float value) const
-{
-	unsigned int location = glGetUniformLocation(id, name);
-	glProgramUniform1f(id, location, value);
-	LogParameterFailure(name, location);
-}
-
-void Shader::SetDouble(const char* name, double value) const
-{
-	unsigned int location = glGetUniformLocation(id, name);
-	glProgramUniform1d(id, location, value);
-	LogParameterFailure(name, location);
-}
-
 void Shader::SetBufferBinding(const char* name, unsigned int binding) const
 {
 	unsigned int blockIndex = glGetProgramResourceIndex(id, GL_SHADER_STORAGE_BLOCK, name);
@@ -121,7 +88,7 @@ void Shader::SetBufferBinding(const char* name, unsigned int binding) const
 
 void Shader::SetTextureBinding(const char* name, unsigned int binding) const
 {
-	SetInt(name, static_cast<int>(binding));
+	SetUniform(name, static_cast<int>(binding));
 }
 
 void Shader::LogParameterFailure(const char* name, unsigned int location) const
@@ -137,6 +104,138 @@ void Shader::LogParameterFailure(const char* name, unsigned int location) const
 			location << ", shader id: " << id << ", error code: " <<
 			errorCode << "\n\n";
 	}
+}
+
+void Shader::SetUniform(const char* name, int value) const
+{
+	unsigned int location = glGetUniformLocation(id, name);
+	glProgramUniform1i(id, location, value);
+	LogParameterFailure(name, location);
+}
+
+void Shader::SetUniform(const char* name, int v0, int v1) const
+{
+	unsigned int location = glGetUniformLocation(id, name);
+	glProgramUniform2i(id, location, v0, v1);
+	LogParameterFailure(name, location);
+}
+
+void Shader::SetUniform(const char* name, int v0, int v1, int v2) const
+{
+	unsigned int location = glGetUniformLocation(id, name);
+	glProgramUniform3i(id, location, v0, v1, v2);
+	LogParameterFailure(name, location);
+}
+
+void Shader::SetUniform(const char* name, int v0, int v1, int v2, int v3) const
+{
+	unsigned int location = glGetUniformLocation(id, name);
+	glProgramUniform4i(id, location, v0, v1, v2, v3);
+	LogParameterFailure(name, location);
+}
+
+void Shader::SetUniform(const char* name, unsigned int value) const
+{
+	unsigned int location = glGetUniformLocation(id, name);
+	glProgramUniform1ui(id, location, value);
+	LogParameterFailure(name, location);
+}
+
+void Shader::SetUniform(const char* name, unsigned int v0, unsigned int v1) const
+{
+	unsigned int location = glGetUniformLocation(id, name);
+	glProgramUniform2ui(id, location, v0, v1);
+	LogParameterFailure(name, location);
+}
+
+void Shader::SetUniform(const char* name, unsigned int v0, unsigned int v1, unsigned int v2) const
+{
+	unsigned int location = glGetUniformLocation(id, name);
+	glProgramUniform3ui(id, location, v0, v1, v2);
+	LogParameterFailure(name, location);
+}
+
+void Shader::SetUniform(const char* name, unsigned int v0, unsigned int v1, unsigned int v2, unsigned int v3) const
+{
+	unsigned int location = glGetUniformLocation(id, name);
+	glProgramUniform4ui(id, location, v0, v1, v2, v3);
+	LogParameterFailure(name, location);
+}
+
+void Shader::SetUniform(const char* name, bool value) const
+{
+	SetUniform(name, static_cast<int>(value));
+}
+
+void Shader::SetUniform(const char* name, bool v0, bool v1) const
+{
+	SetUniform(name, static_cast<int>(v0), static_cast<int>(v1));
+}
+
+void Shader::SetUniform(const char* name, bool v0, bool v1, bool v2) const
+{
+	SetUniform(name, static_cast<int>(v0), static_cast<int>(v1), static_cast<int>(v2));
+}
+
+void Shader::SetUniform(const char* name, bool v0, bool v1, bool v2, bool v3) const
+{
+	SetUniform(name, static_cast<int>(v0), static_cast<int>(v1), static_cast<int>(v2), static_cast<int>(v3));
+}
+
+void Shader::SetUniform(const char* name, float value) const
+{
+	unsigned int location = glGetUniformLocation(id, name);
+	glProgramUniform1f(id, location, value);
+	LogParameterFailure(name, location);
+}
+
+void Shader::SetUniform(const char* name, float v0, float v1) const
+{
+	unsigned int location = glGetUniformLocation(id, name);
+	glProgramUniform2f(id, location, v0, v1);
+	LogParameterFailure(name, location);
+}
+
+void Shader::SetUniform(const char* name, float v0, float v1, float v2) const
+{
+	unsigned int location = glGetUniformLocation(id, name);
+	glProgramUniform3f(id, location, v0, v1, v2);
+	LogParameterFailure(name, location);
+}
+
+void Shader::SetUniform(const char* name, float v0, float v1, float v2, float v3) const
+{
+	unsigned int location = glGetUniformLocation(id, name);
+	glProgramUniform4f(id, location, v0, v1, v2, v3);
+	LogParameterFailure(name, location);
+}
+
+void Shader::SetUniform(const char* name, double value) const
+{
+	unsigned int location = glGetUniformLocation(id, name);
+	glProgramUniform1d(id, location, value);
+	LogParameterFailure(name, location);
+}
+
+void Shader::SetUniform(const char* name, double v0, double v1) const
+{
+	unsigned int location = glGetUniformLocation(id, name);
+	glProgramUniform2d(id, location, v0, v1);
+	LogParameterFailure(name, location);
+}
+
+void Shader::SetUniform(const char* name, double v0, double v1, double v2) const
+{
+	unsigned int location = glGetUniformLocation(id, name);
+	glProgramUniform3d(id, location, v0, v1, v2);
+	LogParameterFailure(name, location);
+}
+
+void Shader::SetUniform(const char* name, double v0, double v1, double v2, double v3) const
+{
+	unsigned int location = glGetUniformLocation(id, name);
+	glProgramUniform4d(id, location, v0, v1, v2, v3);
+	LogParameterFailure(name, location);
 }
 
 Shader::~Shader()
