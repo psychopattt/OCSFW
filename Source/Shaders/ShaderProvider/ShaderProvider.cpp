@@ -7,6 +7,7 @@
 #include <fstream>
 #include <sstream>
 #include <filesystem>
+#include "../ShaderMinifier/ShaderMinifier.h"
 #endif
 
 using namespace std;
@@ -117,25 +118,6 @@ void ShaderProvider::PackShaders()
 	Log << "Shader Packing - Finished packing shaders\n\n";
 }
 
-void ShaderProvider::ShortenShaderCode(string& code)
-{
-	const string findTokens[] = { ";\n", "\n\n", "\n", "\t", "  ", "\\n ", " = " };
-	const string replaceTokens[] = { ";", "\\n", "\\n", " ", " ", "\\n", "=" };
-	static_assert(std::size(findTokens) == std::size(replaceTokens));
-
-	for (int i = 0; i < std::size(findTokens); i++)
-	{
-		size_t matchPosition = code.find(findTokens[i]);
-
-		while (matchPosition != string::npos)
-		{
-			code.replace(matchPosition, findTokens[i].size(), replaceTokens[i]);
-			size_t findOffset = matchPosition + replaceTokens[i].size() - 1;
-			matchPosition = code.find(findTokens[i], findOffset);
-		}
-	}
-}
-
 void ShaderProvider::PackShader(const string& shaderPath, ofstream& outputFile)
 {
 	string code = ReadFile(shaderPath);
@@ -147,7 +129,7 @@ void ShaderProvider::PackShader(const string& shaderPath, ofstream& outputFile)
 		return;
 	}
 
-	ShortenShaderCode(code);
+	ShaderMinifier::MinifyShader(code);
 	outputFile << "case " << GetHash(shaderName) << ": return \"" << code << "\";\n";
 	Log << "Shader Packing - Successfully packed \"" << shaderName << "\"\n";
 }

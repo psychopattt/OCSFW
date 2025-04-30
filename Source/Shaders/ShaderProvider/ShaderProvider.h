@@ -18,7 +18,6 @@ class ShaderProvider
 #if DEBUG
 		static const string ReadFile(const string& shaderName);
 		static const string FindFile(const string& searchedFile);
-		static void ShortenShaderCode(string& code);
 		static void PackShader(const string& shaderPath, std::ofstream& outputFile);
 #else
 		static const string UnpackShader(const string& shaderName);
