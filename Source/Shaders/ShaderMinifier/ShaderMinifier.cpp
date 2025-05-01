@@ -25,7 +25,7 @@ namespace ShaderMinifier
 
 		const regex commentRegex(R"((?:\/\/.*\n|\/\*(?:.|\n)+?\*\/))");
 		const regex directiveRegex(R"((?:^|\n)\s*(#.+?)\s*(?:$|\n))");
-		const regex tokenSpaceRegex(R"(\s*([,;{}()?:=+-/*<>])\s*)");
+		const regex tokenSpaceRegex(R"(\s*([.,;{}()\[\]?:=+-/*%<>|&!^])\s*)");
 		const regex directiveKeyRegex(R"(@(\d+)@)");
 		const regex leadingTrailingSpaceRegex(R"((^|\n) *(.*?) *($|\n))");
 		const regex extraSpaceRegex(R"(  +)");
@@ -53,7 +53,7 @@ namespace ShaderMinifier
 			const std::vector<string> directives = ExtractDirectives(shader);
 			shader = regex_replace(shader, tokenSpaceRegex, "$1");
 			InsertDirectives(shader, directives);
-			
+
 			shader = regex_replace(shader, leadingTrailingSpaceRegex, "$1$2$3");
 			shader = regex_replace(shader, extraSpaceRegex, " ");
 			shader = regex_replace(shader, extraNewlineRegex, "\n");
