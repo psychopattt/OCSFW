@@ -14,6 +14,7 @@ namespace ShaderMinifier
 		TrimComments(shader);
 		TrimSpaces(shader);
 		TrimZeros(shader);
+		RenameDefines(shader);
 		RenameFunctions(shader);
 		EscapeNewlines(shader);
 	}
@@ -33,6 +34,7 @@ namespace ShaderMinifier
 		const regex edgeNewlineRegex(R"((^\n|\n$))");
 		const regex leadingZeroRegex(R"(\b0+(\.\d+))");
 		const regex trailingZeroRegex(R"((\d+\.)0+\b)");
+		const regex defineRegex(R"(^#define\s+([^\s]+))");
 		const regex functionRegex(R"(^.*?\b([a-z_]\w*)\s+([a-z_]\w*)\s*\()", regex::icase);
 		const regex returnRegex(R"(^return$)");
 		const regex mainRegex(R"(^main$)");
@@ -100,6 +102,23 @@ namespace ShaderMinifier
 		{
 			shader = regex_replace(shader, leadingZeroRegex, "$1");
 			shader = regex_replace(shader, trailingZeroRegex, "$1");
+		}
+
+		void RenameDefines(string& shader)
+		{
+			std::smatch match;
+			size_t offset = 0;
+
+			while (regex_search(shader.cbegin() + offset, shader.cend(), match, defineRegex))
+			{
+				string matchedDefine = match.str(1);
+				size_t matchEnd = match.position() + match.length();
+				string replacement = GenerateUniqueIdentifier(shader);
+
+				const regex matchedDefineRegex(R"(([^\.\w]))" + matchedDefine + "\\b");
+				shader = regex_replace(shader, matchedDefineRegex, "$1" + replacement);
+				offset += matchEnd - matchedDefine.length() + replacement.length();
+			}
 		}
 
 		void RenameFunctions(string& shader)
