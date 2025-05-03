@@ -14,6 +14,7 @@ namespace ShaderMinifier
 		TrimComments(shader);
 		TrimSpaces(shader);
 		TrimZeros(shader);
+		RenameStructs(shader);
 		RenameDefines(shader);
 		RenameFunctions(shader);
 		EscapeNewlines(shader);
@@ -34,6 +35,7 @@ namespace ShaderMinifier
 		const regex edgeNewlineRegex(R"((^\n|\n$))");
 		const regex leadingZeroRegex(R"(\b0+(\.\d+))");
 		const regex trailingZeroRegex(R"((\d+\.)0+\b)");
+		const regex structRegex(R"(^.*?\bstruct\s+([a-zA-Z_]\w*)\s*\{)");
 		const regex defineRegex(R"(^#define\s+([^\s]+))");
 		const regex functionRegex(R"(^.*?\b([a-z_]\w*)\s+([a-z_]\w*)\s*\()", regex::icase);
 		const regex returnRegex(R"(^return$)");
@@ -102,6 +104,29 @@ namespace ShaderMinifier
 		{
 			shader = regex_replace(shader, leadingZeroRegex, "$1");
 			shader = regex_replace(shader, trailingZeroRegex, "$1");
+		}
+
+		void RenameStructs(string& shader)
+		{
+			std::smatch match;
+			size_t offset = 0;
+
+			while (regex_search(shader.cbegin() + offset, shader.cend(), match, structRegex))
+			{
+				if (regex_search(match[0].first, match[0].second, directiveRegex))
+				{
+					offset += match.position() + match.length();
+					continue;
+				}
+
+				string matchedStruct = match.str(1);
+				size_t matchEnd = match.position() + match.length();
+				string replacement = GenerateUniqueIdentifier(shader);
+
+				const regex matchedStructRegex(R"(([^\.\w]))" + matchedStruct + "\\b");
+				shader = regex_replace(shader, matchedStructRegex, "$1" + replacement);
+				offset += matchEnd - matchedStruct.length() + replacement.length();
+			}
 		}
 
 		void RenameDefines(string& shader)
