@@ -15,13 +15,15 @@ namespace SimulationMath
 		return pow(1.2, zoom / TransformSettings::FastMultiplier);
 	}
 
+	double GetPanScaleAtZoom(double zoom)
+	{
+		return 1.0 / ScaleZoom(zoom);
+	}
+
 	double GetMaxPanAtZoom(double zoom)
 	{
-		// Calculate pan scale at specified zoom
-		double panScale = 1.0 / ScaleZoom(zoom);
-
 		// Multipy max pan without zoom by pan scale
-		return TransformSettings::MaxPan * panScale;
+		return TransformSettings::MaxPan * GetPanScaleAtZoom(zoom);
 	}
 
 	double GetVisibleWorldSize(double worldSize, double screenSize, double viewportSize)

@@ -48,14 +48,13 @@ bool SimulationTransforms::ApplyPanOffset()
 long long SimulationTransforms::ComputePanOffsetAxis(
 	long long& panOffset, double aspectRatioMultiplier)
 {
-	using TransformSettings::Zoom, TransformSettings::FastMultiplier;
+	using TransformSettings::Zoom, SimulationMath::GetPanScaleAtZoom;
 
 	if (panOffset == 0)
 		return 0;
 
 	// Scale pan offset according to current zoom
-	double scale = 1.0 / pow(1.14, static_cast<double>(Zoom) / FastMultiplier);
-	long long scaledPanOffset = llround(panOffset * scale);
+	long long scaledPanOffset = llround(panOffset * GetPanScaleAtZoom(Zoom));
 
 	// Keep pan speed consistent on all axes
 	scaledPanOffset = llround(scaledPanOffset * aspectRatioMultiplier);

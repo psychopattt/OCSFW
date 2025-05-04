@@ -3,6 +3,7 @@
 namespace SimulationMath
 {
 	double ScaleZoom(double zoom);
+	double GetPanScaleAtZoom(double zoom);
 	double GetMaxPanAtZoom(double zoom);
 
 	double GetVisibleWorldSize(double worldSize, double screenSize, double viewportSize);
