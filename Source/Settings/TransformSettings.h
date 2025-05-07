@@ -9,9 +9,9 @@ namespace TransformSettings
 
 	inline bool ZoomOnMouse = true;
 	inline unsigned short Zoom = 0;
+	inline unsigned short MinUiZoom = 0;
+	inline unsigned short MaxUiZoom = 4000;
 	inline constexpr unsigned short MaxZoom = 0xFFFF - FastMultiplier;
-	inline constexpr unsigned short MaxUiZoom = 4000;
-	inline constexpr unsigned short MinUiZoom = 0;
 
 	inline double ViewportScaleX = 1.0;
 	inline double ViewportScaleY = 1.0;
