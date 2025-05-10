@@ -2,6 +2,8 @@
 
 namespace TransformSettings
 {
+	inline bool ApplyTransforms = true;
+
 	inline constexpr char SlowMultiplier = 1;
 	inline constexpr char DefaultMultiplier = 10;
 	inline constexpr char FastMultiplier = 100;
@@ -34,4 +36,9 @@ namespace TransformSettings
 	inline constexpr long long UiPanScale = MaxPan / 10000000000;
 	inline constexpr long long MaxUiPan = MaxPan / UiPanScale / 2;
 	inline constexpr long long MinUiPan = -MaxUiPan;
+
+	inline double ComputedPanX = 0.0;
+	inline double ComputedPanY = 0.0;
+	inline double ComputedScaleX = 1.0;
+	inline double ComputedScaleY = 1.0;
 }

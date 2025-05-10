@@ -21,16 +21,22 @@ SimulationTransforms::SimulationTransforms(double* quadVertices, size_t quadVert
 
 bool SimulationTransforms::ApplyTransforms()
 {
-	bool updatedTransforms = ApplyPanOffset();
-	updatedTransforms = ApplyZoomPan() || updatedTransforms;
-	updatedTransforms = ApplyMousePan() || updatedTransforms;
-	updatedTransforms = ApplyZoom() || updatedTransforms;
-	updatedTransforms = ApplyPan() || updatedTransforms;
+	bool updatedTransforms = ComputePanOffset();
+	updatedTransforms = ComputeZoomPan() || updatedTransforms;
+	updatedTransforms = ComputeMousePan() || updatedTransforms;
+	updatedTransforms = ComputeZoom() || updatedTransforms;
+	updatedTransforms = ComputePan() || updatedTransforms;
+
+	if (updatedTransforms && TransformSettings::ApplyTransforms)
+	{
+		ApplyZoom();
+		ApplyPan();
+	}
 
 	return updatedTransforms;
 }
 
-bool SimulationTransforms::ApplyPanOffset()
+bool SimulationTransforms::ComputePanOffset()
 {
 	using TransformSettings::PanOffsetX, TransformSettings::PanOffsetY;
 
@@ -69,7 +75,7 @@ long long SimulationTransforms::ComputePanOffsetAxis(
 	return scaledPanOffset;
 }
 
-bool SimulationTransforms::ApplyZoomPan()
+bool SimulationTransforms::ComputeZoomPan()
 {
 	using TransformSettings::Zoom, SimulationMath::GetMaxPanAtZoom,
 		SimulationMath::GetMouseWorldCoordOffsetCenter, MainSettings::Gui;
@@ -102,7 +108,7 @@ bool SimulationTransforms::ApplyZoomPan()
 	return true;
 }
 
-bool SimulationTransforms::ApplyMousePan()
+bool SimulationTransforms::ComputeMousePan()
 {
 	using MainSettings::Gui;
 
@@ -153,7 +159,7 @@ long long SimulationTransforms::ComputeMousePanAxis(double& lastScreenCoord,
 	return llround(worldCoordDiff);
 }
 
-bool SimulationTransforms::ApplyZoom()
+bool SimulationTransforms::ComputeZoom()
 {
 	using TransformSettings::Zoom, TransformSettings::ViewportSizeChanged;
 
@@ -163,38 +169,23 @@ bool SimulationTransforms::ApplyZoom()
 	double scaledZoom = SimulationMath::ScaleZoom(Zoom);
 
 	// Ensure pixels are square on viewports larger than GL_MAX_VIEWPORT_DIMS
-	double scaleX = scaledZoom * TransformSettings::ViewportScaleX;
-	double scaleY = scaledZoom * TransformSettings::ViewportScaleY;
-
-	for (size_t i = 0; i < quadVertexCount; i += 4)
-	{
-		quadVertices[i] = initialQuadVertices[i] * scaleX;
-		quadVertices[i + 1] = initialQuadVertices[i + 1] * scaleY;
-	}
-
-	lastZoom = Zoom;
+	TransformSettings::ComputedScaleX = scaledZoom * TransformSettings::ViewportScaleX;
+	TransformSettings::ComputedScaleY = scaledZoom * TransformSettings::ViewportScaleY;
 	ViewportSizeChanged = false;
+	lastZoom = Zoom;
 
 	return true;
 }
 
-bool SimulationTransforms::ApplyPan()
+bool SimulationTransforms::ComputePan()
 {
 	using TransformSettings::PanX, TransformSettings::PanY;
 
 	if (lastPanX == PanX && lastPanY == PanY)
 		return false;
 
-	double panX = ComputePanAxis(PanX);
-	double panY = ComputePanAxis(PanY);
-
-	// Apply new vertex coordinates
-	for (size_t i = 2; i < quadVertexCount; i += 4)
-	{
-		quadVertices[i] = initialQuadVertices[i] + panX;
-		quadVertices[i + 1] = initialQuadVertices[i + 1] + panY;
-	}
-
+	TransformSettings::ComputedPanX = ComputePanAxis(PanX);
+	TransformSettings::ComputedPanY = ComputePanAxis(PanY);
 	lastPanX = PanX;
 	lastPanY = PanY;
 
@@ -211,4 +202,24 @@ double SimulationTransforms::ComputePanAxis(long long& pan)
 
 	// Convert pan to vertex coordinates
 	return static_cast<double>(pan) / MaxPan;
+}
+
+void SimulationTransforms::ApplyZoom()
+{
+	// Apply new vertex scale
+	for (size_t i = 0; i < quadVertexCount; i += 4)
+	{
+		quadVertices[i] = initialQuadVertices[i] * TransformSettings::ComputedScaleX;
+		quadVertices[i + 1] = initialQuadVertices[i + 1] * TransformSettings::ComputedScaleY;
+	}
+}
+
+void SimulationTransforms::ApplyPan()
+{
+	// Apply new vertex coordinates
+	for (size_t i = 2; i < quadVertexCount; i += 4)
+	{
+		quadVertices[i] = initialQuadVertices[i] + TransformSettings::ComputedPanX;
+		quadVertices[i + 1] = initialQuadVertices[i + 1] + TransformSettings::ComputedPanY;
+	}
 }
