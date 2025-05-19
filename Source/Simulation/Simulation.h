@@ -14,6 +14,8 @@ class Simulation
 		virtual int GetHeight() const;
 		virtual unsigned int GetSeed() const;
 
+		virtual ~Simulation() = default;
+
 	protected:
 		Simulation(int width, int height, unsigned int seed = 0);
 
