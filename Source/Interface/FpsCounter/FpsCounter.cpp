@@ -2,22 +2,26 @@
 #include "GLFW/glfw3.h"
 
 FpsCounter::FpsCounter(double updatesPerSecond)
+	: updateInterval(1 / updatesPerSecond) { }
+
+void FpsCounter::Reset()
 {
-	updateInterval = 1 / updatesPerSecond;
+	totalFrameCounter = 0;
 }
 
 bool FpsCounter::Update()
 {
-	frameCounter++;
+	totalFrameCounter++;
+	intervalFrameCounter++;
 	double currentTime = glfwGetTime();
 	double timeDiff = currentTime - lastUpdateTime;
 
 	if (timeDiff >= updateInterval)
 	{
-		frametime = 1000 * timeDiff / frameCounter;
-		fps = frameCounter / timeDiff;
+		frametime = 1000 * timeDiff / intervalFrameCounter;
+		fps = intervalFrameCounter / timeDiff;
 		lastUpdateTime = currentTime;
-		frameCounter = 0;
+		intervalFrameCounter = 0;
 
 		return true;
 	}
@@ -35,12 +39,17 @@ double FpsCounter::GetFrametime() const
 	return frametime;
 }
 
+unsigned long long FpsCounter::GetFrames() const
+{
+	return totalFrameCounter;
+}
+
 std::string FpsCounter::ToString() const
 {
 	char buffer[25];
 
 	snprintf(
-		buffer, std::size(buffer), "%.2ffps,"
+		buffer, std::size(buffer), "%.2ffps, "
 		"%.3fms", fps, frametime
 	);
 

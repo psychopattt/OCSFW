@@ -4,6 +4,7 @@
 
 #include "Interface/Interface.h"
 #include "Settings/MainSettings.h"
+#include "Interface/FpsCounter/FpsCounter.h"
 
 using namespace ImGui;
 
@@ -26,14 +27,15 @@ enum DisplayFlags : unsigned char
 	Label = 1 << 3,
 	Fps = 1 << 4,
 	Frametime = 1 << 5,
+	Frames = 1 << 6,
 	Everything = 0xFF
 };
 
 ImGuiMetrics::ImGuiMetrics()
 {
 	position = TopLeft;
-	metricsText.reserve(100);
-	displayFlags = static_cast<DisplayFlags>(Everything ^ DearImGui);
+	metricsText.reserve(200);
+	displayFlags = static_cast<DisplayFlags>(Everything ^ DearImGui ^ Frames);
 	windowFlags = ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_AlwaysAutoResize |
 		ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoFocusOnAppearing |
 		ImGuiWindowFlags_NoNav;
@@ -64,8 +66,7 @@ void ImGuiMetrics::ApplyPosition()
 	}
 	else if (position == Center)
 	{
-		SetNextWindowPos(GetMainViewport()->GetCenter(),
-			ImGuiCond_Always, ImVec2(0.5f, 0.5f));
+		SetNextWindowPos(GetMainViewport()->GetCenter(), ImGuiCond_Always, ImVec2(0.5f, 0.5f));
 		windowFlags |= ImGuiWindowFlags_NoMove;
 	}
 	else
@@ -92,20 +93,26 @@ void ImGuiMetrics::ApplyPosition()
 void ImGuiMetrics::RenderMetrics()
 {
 	metricsText.clear();
-	const double* metrics = MainSettings::Gui->GetMetrics();
 
-	AppendMetricsType(Simulation, "Simulation: ", metrics);
-	AppendMetricsType(Interface, "Interface: ", metrics + 2);
+	const FpsCounter* simFpsCounter = MainSettings::Gui->GetSimulationFpsCounter();
+	AppendMetrics(Simulation, "Simulation", simFpsCounter);
+
+	const FpsCounter* uiFpsCounter = MainSettings::Gui->GetInterfaceFpsCounter();
+	AppendMetrics(Interface, "Interface", uiFpsCounter);
 
 	double imGuiFps = GetIO().Framerate;
-	double imGuiMetrics[] = { imGuiFps, 1000.0 / imGuiFps };
-	AppendMetricsType(DearImGui, "ImGui: ", imGuiMetrics);
+	AppendMetrics(DearImGui, "ImGui", imGuiFps, 1000 / imGuiFps, uiFpsCounter->GetFrames());
 
 	Text(metricsText.c_str());
 }
 
-void ImGuiMetrics::AppendMetricsType(DisplayFlags type,
-	const char* label, const double* metrics)
+void ImGuiMetrics::AppendMetrics(DisplayFlags type, const char* label, const FpsCounter* fpsCounter)
+{
+	AppendMetrics(type, label, fpsCounter->GetFps(), fpsCounter->GetFrametime(), fpsCounter->GetFrames());
+}
+
+void ImGuiMetrics::AppendMetrics(DisplayFlags type, const char* label,
+	double fps, double frametime, unsigned long long frames)
 {
 	if (displayFlags & type)
 	{
@@ -113,24 +120,35 @@ void ImGuiMetrics::AppendMetricsType(DisplayFlags type,
 			metricsText += "\n";
 
 		if (displayFlags & Label)
+		{
 			metricsText += label;
+			metricsText += ": ";
+		}
 
 		if (displayFlags & Fps)
-			AppendFormattedMetric(metrics[0], "fps");
+			AppendFormattedMetric(fps, "fps");
 
 		if (displayFlags & Frametime)
 		{
 			if (displayFlags & Fps)
 				metricsText += ", ";
 
-			AppendFormattedMetric(metrics[1], "ms");
+			AppendFormattedMetric(frametime, "ms");
+		}
+
+		if (displayFlags & Frames)
+		{
+			if (displayFlags & Fps || displayFlags & Frametime)
+				metricsText += ", ";
+
+			metricsText += std::to_string(frames) + "f";
 		}
 	}
 }
 
 void ImGuiMetrics::AppendFormattedMetric(double metric, const char* units)
 {
-	char formattedMetric[10];
+	char formattedMetric[11];
 
 	snprintf(
 		formattedMetric, std::size(formattedMetric),
@@ -163,13 +181,15 @@ void ImGuiMetrics::RenderDisplayMenu()
 	RenderDisplaySelectable("Simulation Metrics", Simulation);
 	RenderDisplaySelectable("Interface Metrics", Interface);
 	RenderDisplaySelectable("ImGui Metrics", DearImGui);
+
+	RenderSeparator();
+
 	RenderDisplaySelectable("Fps Metrics", Fps);
 	RenderDisplaySelectable("Frametime Metrics", Frametime);
+	RenderDisplaySelectable("Frames Metrics", Frames);
 	RenderDisplaySelectable("Metrics Labels", Label);
 
-	Spacing();
-	Separator();
-	Spacing();
+	RenderSeparator();
 
 	SetNextItemWidth(CalcItemWidth() * 0.35f);
 	SliderInt("Digits", &metricsDigits, 0, 3, "%d", ImGuiSliderFlags_NoInput);
@@ -197,4 +217,11 @@ void ImGuiMetrics::RenderPositionSelectable(const char* label, Position value)
 {
 	if (Selectable(label, position == value))
 		position = value;
+}
+
+void ImGuiMetrics::RenderSeparator()
+{
+	Spacing();
+	Separator();
+	Spacing();
 }

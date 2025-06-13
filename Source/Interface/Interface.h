@@ -17,14 +17,15 @@ class Interface
 		bool ShouldExit() const;
 		UpdateType Update();
 
-		void TriggerResize() const;
+		void NotifyRestart() const;
 		void ApplyFullscreenState() const;
 		void SetTargetFps(float targetFps) const;
 		void StepFrame();
 
-		void GetSize(int& width, int& height) const;
-		const double* GetMetrics() const;
 		class WindowTitle* GetTitle() const;
+		void GetSize(int& width, int& height) const;
+		const FpsCounter* GetInterfaceFpsCounter() const;
+		const FpsCounter* GetSimulationFpsCounter() const;
 		void GetMousePosition(double& posX, double& posY) const;
 		Viewport* GetViewport() const;
 		GLFWwindow* GetWindow() const;
@@ -37,7 +38,6 @@ class Interface
 		const int initialWidth;
 		const int initialHeight;
 		bool stepFrame = false;
-		double metrics[4] = { };
 
 		GLFWwindow* window;
 		unique_ptr<Viewport> viewport;

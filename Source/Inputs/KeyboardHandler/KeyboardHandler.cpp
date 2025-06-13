@@ -39,7 +39,7 @@ void KeyboardHandler::ApplyRestart(int key, int action)
 			MainSettings::PendingSimSeed
 		);
 
-		MainSettings::Gui->TriggerResize();
+		MainSettings::Gui->NotifyRestart();
 	}
 }
 

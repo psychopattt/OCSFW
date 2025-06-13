@@ -38,7 +38,7 @@ Interface::Interface(int width, int height, const char* title) :
 	imGuiHandler = make_unique<ImGuiHandler>(window);
 
 	// Create the OpenGL window
-	TriggerResize();
+	NotifyRestart();
 }
 
 void Interface::SetOpenGlVersion(int major, int minor)
@@ -109,11 +109,7 @@ UpdateType Interface::Update()
 		updateType |= SimulationUpdate;
 
 		if (simFpsCounter->Update())
-		{
-			metrics[0] = simFpsCounter->GetFps();
-			metrics[1] = simFpsCounter->GetFrametime();
 			title->SetSubText("Simulation: " + simFpsCounter->ToString());
-		}
 	}
 
 	if (uiFpsLimiter->Update())
@@ -121,11 +117,7 @@ UpdateType Interface::Update()
 		updateType |= DisplayUpdate;
 
 		if (uiFpsCounter->Update())
-		{
-			metrics[2] = uiFpsCounter->GetFps();
-			metrics[3] = uiFpsCounter->GetFrametime();
 			title->GetSubTitle()->SetSubText("Interface: " + uiFpsCounter->ToString());
-		}
 
 		UpdateTitle();
 		glfwPollEvents();
@@ -146,9 +138,10 @@ void Interface::UpdateTitle() const
 	}
 }
 
-void Interface::TriggerResize() const
+void Interface::NotifyRestart() const
 {
 	ResizeCallback(window, width, height);
+	simFpsCounter->Reset();
 }
 
 void Interface::ApplyFullscreenState() const
@@ -190,20 +183,25 @@ void Interface::StepFrame()
 	stepFrame = true;
 }
 
+WindowTitle* Interface::GetTitle() const
+{
+	return title.get();
+}
+
 void Interface::GetSize(int& width, int& height) const
 {
 	width = this->width;
 	height = this->height;
 }
 
-const double* Interface::GetMetrics() const
+const FpsCounter* Interface::GetInterfaceFpsCounter() const
 {
-	return metrics;
+	return uiFpsCounter.get();
 }
 
-WindowTitle* Interface::GetTitle() const
+const FpsCounter* Interface::GetSimulationFpsCounter() const
 {
-	return title.get();
+	return simFpsCounter.get();
 }
 
 void Interface::GetMousePosition(double& posX, double& posY) const

@@ -54,7 +54,7 @@ void ImGuiMain::RenderSimulationSettingsSection()
 	if (Button("Restart", ImVec2(-1, 0)))
 	{
 		MainSettings::Sim->Restart(PendingSimSize[0], PendingSimSize[1], PendingSimSeed);
-		MainSettings::Gui->TriggerResize();
+		MainSettings::Gui->NotifyRestart();
 	}
 
 	SeparatorText("Size");
