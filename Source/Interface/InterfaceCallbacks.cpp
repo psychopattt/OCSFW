@@ -20,7 +20,7 @@ void Interface::ActivateCallbacks()
 void Interface::ErrorCallback(int error, const char* message)
 {
 	MainSettings::Log << "GLFW Error - Code " << error << "\n" <<
-		message << "\n";
+		message << "\n\n";
 }
 
 void Interface::ResizeCallback(GLFWwindow* window, int width, int height)
