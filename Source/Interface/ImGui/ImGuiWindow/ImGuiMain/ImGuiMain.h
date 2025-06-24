@@ -12,6 +12,9 @@ class ImGuiMain : public ImGuiWindow
 		static constexpr unsigned int seedStepSpeed = 1;
 
 		void RenderSimulationSection();
+		void RenderSimulationCopyMenu();
+		void RenderSimulationCopyButton();
+		void RenderSimulationPasteButton();
 		void RenderSimulationSettingsSection();
 		void RenderSimulationPositionSection();
 		void RenderSimulationZoomSection();
