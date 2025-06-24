@@ -38,7 +38,7 @@ Interface::Interface(int width, int height, const char* title) :
 	imGuiHandler = make_unique<ImGuiHandler>(window);
 
 	// Create the OpenGL window
-	NotifyRestart();
+	ResizeCallback(window, width, height);
 }
 
 void Interface::SetOpenGlVersion(int major, int minor)
