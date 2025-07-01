@@ -14,7 +14,7 @@ void KeyboardHandler::HandleKeyboard(GLFWwindow* window,
 	int key, int scanCode, int action, int mods)
 {
 	ApplyHideGui(key, action);
-	ApplyRestart(key, action);
+	ApplyRestart(key, action, mods);
 	ApplyFullscreen(key, action);
 
 	if (!ImGui::GetIO().WantCaptureKeyboard)
@@ -29,15 +29,24 @@ void KeyboardHandler::ApplyHideGui(int key, int action)
 		MainSettings::HideGui = !MainSettings::HideGui;
 }
 
-void KeyboardHandler::ApplyRestart(int key, int action)
+void KeyboardHandler::ApplyRestart(int key, int action, int mods)
 {
+	using MainSettings::PendingSimSize, MainSettings::PendingSimSeed;
+
 	if (key == GLFW_KEY_F5 && action == GLFW_PRESS)
 	{
-		MainSettings::Sim->Restart(
-			MainSettings::PendingSimSize[0],
-			MainSettings::PendingSimSize[1],
-			MainSettings::PendingSimSeed
-		);
+		if (mods & GLFW_MOD_CONTROL)
+		{
+			MainSettings::Sim->Initialize(
+				PendingSimSize[0], PendingSimSize[1], PendingSimSeed
+			);
+		}
+		else
+		{
+			MainSettings::Sim->Restart(
+				PendingSimSize[0], PendingSimSize[1], PendingSimSeed
+			);
+		}
 
 		MainSettings::Gui->NotifyRestart();
 	}
