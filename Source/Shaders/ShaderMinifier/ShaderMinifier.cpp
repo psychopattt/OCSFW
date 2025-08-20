@@ -60,7 +60,7 @@ namespace ShaderMinifier
 			const std::vector<string> directives = ExtractDirectives(shader);
 			shader = regex_replace(shader, tokenSpaceRegex, "$1");
 			InsertDirectives(shader, directives);
-			
+
 			shader = regex_replace(shader, leadingTrailingSpaceRegex, "$1$2$3");
 			shader = regex_replace(shader, extraSpaceRegex, " ");
 			shader = regex_replace(shader, extraNewlineRegex, "\n");
@@ -173,6 +173,7 @@ namespace ShaderMinifier
 				const regex matchedFunctionRegex(R"(([^\.\w]))" + matchedFunction + "\\b");
 				shader = regex_replace(shader, matchedFunctionRegex, "$1" + replacement);
 				offset += matchEnd - matchedFunction.length() + replacement.length();
+				AdvanceToNextFunctionEnd(shader, offset);
 			}
 		}
 
