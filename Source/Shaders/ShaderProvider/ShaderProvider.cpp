@@ -4,9 +4,11 @@
 #include "Settings/MainSettings.h"
 
 #if DEBUG
+#include <regex>
 #include <fstream>
 #include <sstream>
 #include <filesystem>
+#include "../ShaderMerger/ShaderMerger.h"
 #include "../ShaderMinifier/ShaderMinifier.h"
 #endif
 
@@ -52,7 +54,10 @@ const string ShaderProvider::ReadFile(const string& shaderName)
 		stream << file.rdbuf();
 		file.close();
 
-		return stream.str();
+		string shader = stream.str();
+		ShaderMerger::ProcessIncludes(shader);
+
+		return shader;
 	}
 	catch (ifstream::failure exception)
 	{
@@ -126,6 +131,11 @@ void ShaderProvider::PackShader(const string& shaderPath, ofstream& outputFile)
 	if (code.empty())
 	{
 		Log << "Shader Packing - Failed to pack shader \"" << shaderName << "\"\n";
+		return;
+	}
+	else if (!regex_search(code.cbegin(), code.cend(), regex(R"(void\s+main\s*\(\s*\))")))
+	{
+		Log << "Shader Packing - Skipped \"" << shaderName << "\": No \"main\" function\n";
 		return;
 	}
 
