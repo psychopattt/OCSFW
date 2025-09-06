@@ -171,7 +171,7 @@ void Interface::SetTargetFps(float targetFps) const
 	using MainSettings::TargetFps;
 
 	TargetFps = targetFps < 0 ? 0 : targetFps;
-	MainSettings::ThreadSleep = TargetFps < 100;
+	MainSettings::ThreadSleep = TargetFps <= 100;
 	simFpsLimiter->SetTargetFps(TargetFps);
 }
 
