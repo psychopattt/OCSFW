@@ -24,7 +24,7 @@ namespace ShaderMinifier
 	namespace
 	{
 		size_t identifierOffset;
-		const string characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+		const string characters = "bcdfghjklmnpqrstvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
 		const regex commentRegex(R"((?:\/\/.*\n|\/\*(?:.|\n)+?\*\/))");
 		const regex directiveRegex(R"((?:^|\n)\s*(#.+?)\s*(?:$|\n))");
