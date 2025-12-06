@@ -19,11 +19,13 @@ namespace ShaderMinifier
 		RenameFunctions(shader);
 		RenameVariables(shader);
 		EscapeNewlines(shader);
+		SplitShader(shader);
 	}
 
 	namespace
 	{
 		size_t identifierOffset;
+		const size_t maxSectionLength = 16384;
 		const string characters = "bcdfghjklmnpqrstvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
 		const regex commentRegex(R"((?:\/\/.*\n|\/\*(?:.|\n)+?\*\/))");
@@ -276,6 +278,17 @@ namespace ShaderMinifier
 		void EscapeNewlines(string& shader)
 		{
 			shader = regex_replace(shader, newlineRegex, "\\n");
+		}
+
+		void SplitShader(string& shader)
+		{
+			size_t sectionEnd = maxSectionLength;
+
+			while (sectionEnd < shader.size())
+			{
+				shader.insert(sectionEnd, "\"\"");
+				sectionEnd += maxSectionLength + 2;
+			}
 		}
 	}
 }

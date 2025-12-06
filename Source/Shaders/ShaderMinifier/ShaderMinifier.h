@@ -30,6 +30,7 @@ namespace ShaderMinifier
 		const string GenerateUniqueIdentifier(const string& shader);
 		const string GenerateIdentifier(size_t id);
 		void EscapeNewlines(string& shader);
+		void SplitShader(string& shader);
 	}
 };
 
