@@ -191,9 +191,6 @@ void ImGuiMain::RenderPerformanceSection()
 		Spacing();
 		SeparatorText("Target FPS");
 
-		if (InputFloat("##textTargetFps", &TargetFps, 1, 10, "%.2f"))
-			Gui->SetTargetFps(TargetFps);
-
 		if (SliderFloat("##sliderTargetFps", &TargetFps, 0, 500, "%.2f"))
 			Gui->SetTargetFps(TargetFps);
 
