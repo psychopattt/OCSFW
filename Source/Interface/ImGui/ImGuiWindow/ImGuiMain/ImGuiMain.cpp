@@ -116,7 +116,7 @@ void ImGuiMain::RenderSimulationSettingsSection()
 {
 	using MainSettings::PendingSimSize, MainSettings::PendingSimSeed;
 
-	if (Button("Restart", ImVec2(-1, 0)))
+	if (Button("Restart [F5]", ImVec2(-1, 0)))
 	{
 		MainSettings::Sim->Restart(PendingSimSize[0], PendingSimSize[1], PendingSimSeed);
 		MainSettings::Gui->NotifyRestart();
@@ -194,7 +194,7 @@ void ImGuiMain::RenderPerformanceSection()
 		if (SliderFloat("##sliderTargetFps", &TargetFps, 0, 500, "%.2f"))
 			Gui->SetTargetFps(TargetFps);
 
-		if (Button("Step Frame", ImVec2(-1, 0)))
+		if (Button("Step [F]", ImVec2(-1, 0)))
 			Gui->StepFrame();
 	}
 }
@@ -208,6 +208,8 @@ void ImGuiMain::RenderInterfaceSection()
 		if (Checkbox("Fullscreen", &MainSettings::FullscreenEnabled))
 			MainSettings::Gui->ApplyFullscreenState();
 
+		SameLine();
+		TextDisabled("[F11]");
 		SeparatorText("Font Size");
 
 		bool fontChanged = SliderInt(
