@@ -205,6 +205,10 @@ void ImGuiMain::RenderInterfaceSection()
 
 	if (CollapsingHeader("Interface"))
 	{
+		Checkbox("Hide UI", &MainSettings::HideGui);
+		SameLine();
+		TextDisabled("[F1]");
+
 		if (Checkbox("Fullscreen", &MainSettings::FullscreenEnabled))
 			MainSettings::Gui->ApplyFullscreenState();
 
