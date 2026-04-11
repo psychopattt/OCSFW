@@ -17,10 +17,8 @@ void KeyboardHandler::HandleKeyboard(GLFWwindow* window,
 	ApplyRestart(key, action, mods);
 	ApplyFullscreen(key, action);
 
-	if (!ImGui::GetIO().WantCaptureKeyboard)
-	{
+	if (!ImGui::GetIO().WantTextInput)
 		ApplyFrameStep(key, action);
-	}
 }
 
 void KeyboardHandler::ApplyHideGui(int key, int action)
