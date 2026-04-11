@@ -194,7 +194,14 @@ void ImGuiMain::RenderPerformanceSection()
 		if (SliderFloat("##sliderTargetFps", &TargetFps, 0, 500, "%.2f"))
 			Gui->SetTargetFps(TargetFps);
 
-		if (Button("Step [F]", ImVec2(-1, 0)))
+		float buttonWidth = (GetItemRectSize().x - GetStyle().ItemSpacing.x) / 2;
+
+		if (Button("Reset", ImVec2(buttonWidth, 0)))
+			Gui->SetTargetFps(100);
+
+		SameLine();
+
+		if (Button("Step [F]", ImVec2(buttonWidth, 0)))
 			Gui->StepFrame();
 	}
 }
