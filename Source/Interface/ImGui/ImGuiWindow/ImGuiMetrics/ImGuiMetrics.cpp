@@ -37,8 +37,7 @@ ImGuiMetrics::ImGuiMetrics()
 	metricsText.reserve(200);
 	displayFlags = static_cast<DisplayFlags>(Everything ^ DearImGui ^ Frames);
 	windowFlags = ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_AlwaysAutoResize |
-		ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoFocusOnAppearing |
-		ImGuiWindowFlags_NoNav;
+		ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoNavInputs;
 }
 
 void ImGuiMetrics::Render()
