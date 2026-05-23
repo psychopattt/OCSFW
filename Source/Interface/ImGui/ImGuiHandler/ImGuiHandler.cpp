@@ -74,7 +74,8 @@ void ImGuiHandler::ApplyStyle()
 	colors[ImGuiCol_TabDimmed] = ImVec4(0.18f, 0.18f, 0.18f, 1.00f);
 	colors[ImGuiCol_TabDimmedSelected] = ImVec4(0.36f, 0.36f, 0.36f, 0.54f);
 	colors[ImGuiCol_ModalWindowDimBg] = ImVec4(0.00f, 0.00f, 0.00f, 0.50f);
-	colors[ImGuiCol_NavHighlight] = ImVec4(0.00f, 1.00f, 0.00f, 0.50f);
+	colors[ImGuiCol_NavCursor] = ImVec4(0.00f, 1.00f, 0.00f, 0.50f);
+	colors[ImGuiCol_CheckboxSelectedBg] = colors[ImGuiCol_FrameBg];
 	colors[ImGuiCol_CheckMark] = backgroundGreen;
 	colors[ImGuiCol_SliderGrab] = hoveredGreen;
 	colors[ImGuiCol_SliderGrabActive] = activeGreen;
