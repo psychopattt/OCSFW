@@ -1,11 +1,10 @@
 #include "Interface.h"
 
-#include <chrono>
-#include <thread>
 #include <string>
 
 #include "glad/gl.h"
 #include "GLFW/glfw3.h"
+#include "imgui/imgui_impl_glfw.h"
 
 #include "Settings/LogString/LogString.h"
 #include "Settings/MainSettings.h"
@@ -101,7 +100,7 @@ UpdateType Interface::Update()
 	UpdateType updateType = None;
 
 	if (MainSettings::ThreadSleep)
-		std::this_thread::sleep_for(std::chrono::milliseconds(1));
+		ImGui_ImplGlfw_Sleep(1);
 
 	if (simFpsLimiter->Update() || stepFrame)
 	{
