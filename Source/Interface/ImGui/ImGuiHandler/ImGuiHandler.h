@@ -8,8 +8,8 @@ class ImGuiHandler
 		~ImGuiHandler();
 
 	private:
-		void LoadFonts();
-		void ApplyStyle();
+		void ApplyConfiguration();
+		void ApplyColors(struct ImVec4* colors);
 		void BeginRender();
 		void EndRender();
 };

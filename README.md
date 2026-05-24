@@ -37,4 +37,3 @@ An example of a larger project is available [here](https://github.com/psychopatt
 - [GLFW](https://www.glfw.org)
 - [GLAD](https://github.com/Dav1dde/glad)
 - [Dear ImGui](https://github.com/ocornut/imgui)
-- [Proggy Fonts](https://github.com/bluescan/proggyfonts)

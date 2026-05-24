@@ -5,7 +5,6 @@
 #include "imgui/imgui_impl_opengl3.h"
 #include "imgui/imgui_impl_glfw.h"
 
-#include "ProggyRegular.cpp"
 #include "../ImGuiWindow/ImGuiWindow.h"
 #include "../ImGuiWindow/ImGuiLog/ImGuiLog.h"
 #include "../ImGuiWindow/ImGuiMain/ImGuiMain.h"
@@ -25,14 +24,7 @@ ImGuiHandler::ImGuiHandler(GLFWwindow* glfwWindow)
 {
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
-
-	ImGuiIO& io = ImGui::GetIO();
-	io.IniFilename = NULL; // Disable save/load
-	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
-	io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
-
-	LoadFonts();
-	ApplyStyle();
+	ApplyConfiguration();
 
 	ImGui_ImplGlfw_InitForOpenGL(glfwWindow, true);
 	ImGui_ImplOpenGL3_Init();
@@ -44,28 +36,31 @@ ImGuiHandler::ImGuiHandler(GLFWwindow* glfwWindow)
 		menu->Initialize();
 }
 
-void ImGuiHandler::LoadFonts()
+void ImGuiHandler::ApplyConfiguration()
 {
 	ImGuiIO& io = ImGui::GetIO();
-	io.Fonts->AddFontDefault();
-	io.Fonts->AddFontFromMemoryCompressedBase85TTF(ProggyRegularData, 20);
-	io.Fonts->AddFontFromMemoryCompressedBase85TTF(ProggyRegularData, 25);
-	io.Fonts->AddFontFromMemoryCompressedBase85TTF(ProggyRegularData, 30);
-	io.FontDefault = io.Fonts->Fonts[MainSettings::SelectedFontSize];
+	io.IniFilename = nullptr; // Disable save/load
+	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+	io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
+	io.Fonts->AddFontDefaultVector();
+
+	ImGuiStyle& style = ImGui::GetStyle();
+	style.FramePadding = ImVec2(4, 5);
+	style.WindowRounding = 3;
+	style.FrameRounding = 1;
+	style.FontSizeBase = 18;
+
+	ApplyColors(style.Colors);
 }
 
-void ImGuiHandler::ApplyStyle()
+void ImGuiHandler::ApplyColors(ImVec4* colors)
 {
 	ImGui::StyleColorsDark();
-	ImGuiStyle& style = ImGui::GetStyle();
-	style.FramePadding = ImVec2(4, 4);
-	style.WindowRounding = 3;
 
 	const ImVec4 activeGreen = ImVec4(0.16f, 0.43f, 0.07f, 1.00f);
 	const ImVec4 hoveredGreen = ImVec4(0.16f, 0.43f, 0.07f, 0.80f);
 	const ImVec4 backgroundGreen = ImVec4(0.16f, 0.43f, 0.07f, 0.60f);
 
-	ImVec4* colors = style.Colors;
 	colors[ImGuiCol_FrameBg] = ImVec4(0.30f, 0.30f, 0.30f, 0.60f);
 	colors[ImGuiCol_FrameBgHovered] = ImVec4(0.35f, 0.35f, 0.35f, 0.70f);
 	colors[ImGuiCol_FrameBgActive] = ImVec4(0.40f, 0.40f, 0.40f, 0.80f);
