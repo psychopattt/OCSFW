@@ -12,10 +12,6 @@
 
 using namespace ImGui;
 
-static const char* fontSizes[] = {
-	"Small", "Medium", "Large", "Very Large"
-};
-
 void ImGuiMain::Initialize()
 {
 	MainSettings::PendingSimSeed = MainSettings::Sim->GetSeed();
@@ -208,8 +204,6 @@ void ImGuiMain::RenderPerformanceSection()
 
 void ImGuiMain::RenderInterfaceSection()
 {
-	using MainSettings::SelectedFontSize;
-
 	if (CollapsingHeader("Interface"))
 	{
 		Checkbox("Hide UI", &MainSettings::HideGui);
@@ -221,17 +215,8 @@ void ImGuiMain::RenderInterfaceSection()
 
 		SameLine();
 		TextDisabled("[F11]");
-		SeparatorText("Font Size");
 
-		bool fontChanged = SliderInt(
-			"##sliderFontSize", &SelectedFontSize, 0, 3,
-			fontSizes[SelectedFontSize], ImGuiSliderFlags_NoInput
-		);
-
-		if (fontChanged)
-		{
-			ImGuiIO& io = GetIO();
-			io.FontDefault = io.Fonts->Fonts[SelectedFontSize];
-		}
+		SeparatorText("Font Scale");
+		DragFloat("##dragFontScale", &GetStyle().FontScaleMain, 0.01f, 0.5f, 3, "%.2f");
 	}
 }

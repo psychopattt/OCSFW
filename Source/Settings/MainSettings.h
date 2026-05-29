@@ -11,7 +11,6 @@ namespace MainSettings
 	inline class Interface* Gui = nullptr;
 	inline bool FullscreenEnabled = false;
 	inline bool ShowMetrics = false;
-	inline int SelectedFontSize = 1;
 	inline bool HideGui = false;
 
 	extern class LogString Log;
